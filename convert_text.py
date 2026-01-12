@@ -5,6 +5,7 @@ from os import listdir, path
 from os.path import exists
 from sys import argv
 
+# External dependencies:
 from fpdf import FPDF
 
 
@@ -18,6 +19,7 @@ def main(path_to_files, file_type="html", capital=""):
             with open(file, "r") as f:
                 content = f.read()
         except OSError as e:
+            # All errors use encoding for Bold/Red.
             print(f"\033[1;31mERROR\033[0m: Can´t read {file}\nCause: {e}\nSkipping...")
             continue
         if capital:
@@ -41,6 +43,7 @@ def to_html(file, content):
     output_file = path.join(path.dirname(file), clean_name + ".html")
 
     try:
+        # Formatting needed to keep the output file well formated.
         with open(output_file, "w") as f:
             f.write(f"""<!DOCTYPE html>
     <html lang="">
@@ -112,13 +115,13 @@ def filter_txt_files(path_to_files):
 
 def arg_validation(path_to_files, file_type, capital):
     if not exists(path_to_files):
-        print(f"Invalid path: {path_to_files}")
+        print(f"\033[1;31mERROR\033[0m Invalid path: {path_to_files}")
         show_help()
         sys.exit(1)
 
     file_type = file_type.lower()
     if file_type != "html" and file_type != "pdf":
-        print(f"Invalid filetype: {file_type}")
+        print(f"\033[1;31mERROR\033[0m: Invalid filetype: {file_type}")
         show_help()
         sys.exit(1)
 
@@ -128,7 +131,7 @@ def arg_validation(path_to_files, file_type, capital):
     elif capital == "":
         capital = bool(False)
     else:
-        print(f"Invalid Argument: {capital}")
+        print(f"\033[1;31mERROR\033[0m: Invalid Argument: {capital}")
         show_help()
         sys.exit(1)
 
