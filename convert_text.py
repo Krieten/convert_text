@@ -1,24 +1,31 @@
 #!/usr/bin/env python3
 
 import sys
+from os import listdir, path
 from os.path import exists
 from sys import argv
 
 
 def main(path_to_files, file_type="html", capital=""):
     file_type, capital = arg_validation(path_to_files, file_type, capital)
-    sys.exit(0)
+    txt_files = filter_txt_files(path_to_files)
+
+
+def filter_txt_files(path_to_files):
+    txt_files = []
+    for file in listdir(path_to_files):
+        if file.endswith(".txt"):
+            txt_files.append(path.join(path_to_files, file))
+    return txt_files
 
 
 def arg_validation(path_to_files, file_type, capital):
     if not exists(path_to_files):
         print(f"Invalid path: {path_to_files}")
-        sys.exit(1)
 
     file_type = file_type.lower()
     if file_type != "html" and file_type != "pdf":
         print(f"Invalid filetype: {file_type}")
-        sys.exit(1)
 
     capital = capital.lower()
     if capital == "capital":
@@ -27,7 +34,6 @@ def arg_validation(path_to_files, file_type, capital):
         capital = bool(False)
     else:
         print(f"Invalid Argument: {capital}")
-        sys.exit(1)
 
     return file_type, capital
 
