@@ -96,13 +96,18 @@ def show_help():
 
 def filter_txt_files(path_to_files):
     txt_files = []
-    if path.isfile(path_to_files):
+    if path.isfile(path_to_files) and path_to_files.endswith(".txt"):
        txt_files.append(path_to_files)
     else: 
         for file in listdir(path_to_files):
             if file.endswith(".txt"):
                 txt_files.append(path.join(path_to_files, file))
-    return txt_files
+    if len(txt_files) > 0:
+        return txt_files
+    else:
+        print(f"\033[1;31mERROR\033[0m No .txt files found at {path_to_files}")
+        sys.exit(1)
+    
 
 
 def arg_validation(path_to_files, file_type, capital):
