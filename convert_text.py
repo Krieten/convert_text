@@ -14,6 +14,8 @@ def main(path_to_files, file_type="html", capital=""):
     for file in txt_files:
         with open(file, "r") as f:
             content = f.read()
+        if capital:
+            content = content.upper()
         if file_type == "html":
             to_html(file, content)
         else:
