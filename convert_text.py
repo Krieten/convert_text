@@ -14,15 +14,20 @@ def main(path_to_files, file_type="html", capital=""):
     multiple = ""
     conversion_count = 0
     for file in txt_files:
-        with open(file, "r") as f:
-            content = f.read()
+        try:
+            with open(file, "r") as f:
+                content = f.read()
+        except OSError as e:
+            print(f"\033[1;31mERROR\033[0m: Can´t read {file}\nCause: {e}\nSkipping...")
+            continue
         if capital:
             content = content.upper()
         if file_type == "html":
-            to_html(file, content)
+            success = to_html(file, content)
         else:
-            to_pdf(file, content)
-        conversion_count += 1
+            success = to_pdf(file, content)
+        if success:
+            conversion_count += 1
         if conversion_count != 1:
             multiple = "s"
     print(f"{conversion_count} file{multiple} were converted to {file_type}.")
@@ -35,8 +40,9 @@ def to_html(file, content):
     title = clean_name.replace("_", " ")
     output_file = path.join(path.dirname(file), clean_name + ".html")
 
-    with open(output_file, "w") as f:
-        f.write(f"""<!DOCTYPE html>
+    try:
+        with open(output_file, "w") as f:
+            f.write(f"""<!DOCTYPE html>
     <html lang="">
     <head>
         <meta charset="UTF-8" />
@@ -46,12 +52,16 @@ def to_html(file, content):
         <h1>{title}</h1>
         <p>
 """)
-        for line in content.split("\n"):
-            f.write(f"\t\t\t{line}<br>\n")
-        f.write("""\t\t</p>
+            for line in content.split("\n"):
+                f.write(f"\t\t\t{line}<br>\n")
+            f.write("""\t\t</p>
     </body>
 </html>
 """)
+    except OSError as e:
+        print(f"\033[1;31mERROR\033[0m: Can´t write {output_file}\nCause: {e}\nSkipping...")
+        return False
+    return True
 
 
 def to_pdf(file, content):
@@ -60,15 +70,20 @@ def to_pdf(file, content):
     title = clean_name.replace("_", " ")
     output_file = path.join(path.dirname(file), clean_name + ".pdf")
 
-    pdf = FPDF()
-    pdf.set_auto_page_break(auto=True, margin=15)
-    pdf.add_page()
-    pdf.set_font("Arial", size=20)
-    pdf.cell(0, 10, title, ln=True)
-    pdf.set_font("Arial", size=12)
-    for line in content.split("\n"):
-        pdf.multi_cell(0, 8, line)
-    pdf.output(output_file)
+    try:
+        pdf = FPDF()
+        pdf.set_auto_page_break(auto=True, margin=15)
+        pdf.add_page()
+        pdf.set_font("Arial", size=20)
+        pdf.cell(0, 10, title, ln=True)
+        pdf.set_font("Arial", size=12)
+        for line in content.split("\n"):
+            pdf.multi_cell(0, 8, line)
+        pdf.output(output_file)
+    except OSError as e:
+        print(f"\033[1;31mERROR\033[0m: Can´t write {output_file}\nCause: {e}\nSkipping...")
+        return False
+    return True
 
 
 def show_help():
