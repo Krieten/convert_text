@@ -75,6 +75,7 @@ def to_pdf(file, content):
         pdf.set_auto_page_break(auto=True, margin=15)
         pdf.add_page()
         pdf.set_font("Arial", size=20)
+        pdf.set_title(title)
         pdf.cell(0, 10, title, ln=True)
         pdf.set_font("Arial", size=12)
         for line in content.split("\n"):
