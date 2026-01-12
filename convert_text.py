@@ -73,8 +73,8 @@ def to_pdf(file, content):
 
 def show_help():
     print(
-        "usage:\t\tconvert_text.py path_to_files [HTML|pdf] [capital]\n"
-        "example:\tconvert_text.py ~/Documents/input/ pdf capital"
+        "usage:\t\t./convert_text.py path_to_files [HTML|pdf] [capital]\n"
+        "example:\t./convert_text.py ~/Documents/input/ pdf capital"
     )
 
 
