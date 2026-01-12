@@ -9,6 +9,41 @@ from sys import argv
 def main(path_to_files, file_type="html", capital=""):
     file_type, capital = arg_validation(path_to_files, file_type, capital)
     txt_files = filter_txt_files(path_to_files)
+    for file in txt_files:
+        with open(file, "r") as f:
+            content = f.read()
+        if file_type == "html":
+            to_html(file, content)
+
+
+#        else:
+#            to_pdf(file, content)
+
+
+def to_html(file, content):
+    filename = path.basename(file)
+    clean_name = path.splitext(filename)[0]
+    title = clean_name.replace("_", " ")
+    content = content.replace("\n", "<br>")
+    output_file = path.join(path.dirname(file), clean_name + ".html")
+
+    with open(output_file, "w") as f:
+        f.write(f"""
+<!DOCTYPE html>
+    <html lang="">
+        <head>
+            <meta charset="UTF-8" />
+            <title>{title}</title>
+        </head>
+        <body>
+            <h1>{title}</h1>
+            <p>{content}</p>
+        </body>
+    </html>
+""")
+
+
+# def to_pdf(file, content):
 
 
 def show_help():
