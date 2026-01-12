@@ -96,9 +96,12 @@ def show_help():
 
 def filter_txt_files(path_to_files):
     txt_files = []
-    for file in listdir(path_to_files):
-        if file.endswith(".txt"):
-            txt_files.append(path.join(path_to_files, file))
+    if path.isfile(path_to_files):
+       txt_files.append(path_to_files)
+    else: 
+        for file in listdir(path_to_files):
+            if file.endswith(".txt"):
+                txt_files.append(path.join(path_to_files, file))
     return txt_files
 
 
