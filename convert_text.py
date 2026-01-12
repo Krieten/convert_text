@@ -11,6 +11,8 @@ from fpdf import FPDF
 def main(path_to_files, file_type="html", capital=""):
     file_type, capital = arg_validation(path_to_files, file_type, capital)
     txt_files = filter_txt_files(path_to_files)
+    multiple = ""
+    conversion_count = 0
     for file in txt_files:
         with open(file, "r") as f:
             content = f.read()
@@ -20,6 +22,10 @@ def main(path_to_files, file_type="html", capital=""):
             to_html(file, content)
         else:
             to_pdf(file, content)
+        conversion_count += 1
+        if conversion_count != 1:
+            multiple = "s"
+    print(f"{conversion_count} file{multiple} were converted to {file_type}.")
     sys.exit(0)
 
 
